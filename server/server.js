@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import connect from './db/connect.js';
+import fs from "fs";
+
 
 dotenv.config();
 
@@ -16,17 +18,38 @@ const config = {
   baseURL: process.env.BASE_URL,
   clientID: process.env.CLIENT_ID,
   issuerBaseURL: process.env.ISSUER_BASE_URL,
+
 };
 
+app.use(auth(config));
 app.use(cors({
-    orgin: process.env.CLIENT_URL,
+    origin: process.env.CLIENT_URL,
     credentials: true,
 }));
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.get('/', (req, res) => {
+    res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+  });
 
-app.use(auth(config));
+app.get('/hello', (req, res) => {
+    res.send('Hello World');
+});
+
+//routes
+const routeFiles  = fs.readdirSync('./routes');
+
+routeFiles.forEach((file) => {
+    import(`./routes/${file}`).then((route) => {
+        app.use(route.default);
+    })
+    .catch((error) =>{
+        console.log("error importing route",error);
+        
+    });
+});
 
 const server = async () => {
     try {
