@@ -11,11 +11,11 @@ function page() {
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
-      router.push("https://localhost:8000/login");
+      router.push("http://localhost:8000/login");
     }
   }, [isAuthenticated]);
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col">                             
       <Header />
 
       <h2 className="flex-1 pt-8 mx-auto w-[90%] text-3xl font-bold text-black">

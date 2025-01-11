@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation";
 import React from "react";
 import Profile from "./profile";
 
-
 function Header() {
   const { isAuthenticated } = useGlobalContext();
   const pathname = usePathname();
@@ -48,15 +47,15 @@ function Header() {
                 : ""
             }`}
           >
-            Post  Job
+            Post a Job
           </Link>
         </li>
       </ul>
 
       <div className="flex items-center gap-4">
         {isAuthenticated ? (
-         <Profile/>
-        ):(
+          <Profile />
+        ) : (
           <div className="flex items-center gap-6">
             <Link
               href={"http://localhost:8000/login"}
@@ -65,7 +64,13 @@ function Header() {
               <LogIn className="w-4 h-4" />
               Login
             </Link>
-            
+            <Link
+              href={"http://localhost:8000/login"}
+              className="py-2 px-6 rounded-md border flex items-center gap-4 border-[#7263F3] text-[#7263F3] hover:bg-[#7263F3]/10 trasition-all duration-200 ease-in-out"
+            >
+              <UserPlus className="w-4 h-4" />
+              Register
+            </Link>
           </div>
         )}
       </div>

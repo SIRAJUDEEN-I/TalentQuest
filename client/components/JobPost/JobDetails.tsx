@@ -2,6 +2,7 @@
 import { useGlobalContext } from "@/context/globalContext";
 import React from "react";
 import { Label } from "../ui/label";
+import "react-quill-new/dist/quill.snow.css";
 import { Separator } from "../ui/separator";
 import { Input } from "../ui/input";
 import { Checkbox } from "../ui/checkbox";

@@ -76,6 +76,20 @@ app.get("/", async (req, res) => {
     }
 });
 
+app.post("/login", async (req, res) => {
+    const { username, password } = req.body;
+    // Perform authentication logic here
+    // For example, check username and password against the database
+    const user = await User.findOne({ username, password });
+    if (user) {
+        // Authentication successful
+        res.status(200).json({ success: true, user });
+    } else {
+        // Authentication failed
+        res.status(401).json({ success: false, message: "Invalid credentials" });
+    }
+});
+
 // Routes
 const routeFiles = fs.readdirSync('./routes');
 
