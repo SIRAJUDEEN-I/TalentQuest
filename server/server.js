@@ -19,6 +19,12 @@ const config = {
   baseURL: process.env.BASE_URL,
   clientID: process.env.CLIENT_ID,
   issuerBaseURL: process.env.ISSUER_BASE_URL,
+  routes:{
+    postLogoutRedirect: process.env.CLIENT_URL,
+    callback: "/callback",
+    logout: "/logout",
+    login: "/login",
+  }
   // Add state parameter to avoid BadRequestError
  
 };
