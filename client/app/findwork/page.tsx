@@ -8,10 +8,10 @@ import { useJobsContext } from "@/context/jobsContext";
 import { Job } from "@/types/types";
 import { grip, list, table } from "@/utils/Icons";
 import Image from "next/image";
-import React, { useEffect } from "react";
+import React, { useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
-function page() {
+function FindWorkComponent() {
   const { jobs, filters, searchJobs } = useJobsContext();
   const [columns, setColumns] = React.useState(3);
   const searchParams = useSearchParams();
@@ -131,4 +131,10 @@ function page() {
   );
 }
 
-export default page;
+export default function FindWorkPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <FindWorkComponent />
+    </Suspense>
+  );
+}
