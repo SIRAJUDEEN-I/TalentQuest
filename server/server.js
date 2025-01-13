@@ -19,6 +19,12 @@ const config = {
   baseURL: process.env.BASE_URL,
   clientID: process.env.CLIENT_ID,
   issuerBaseURL: process.env.ISSUER_BASE_URL,
+  routes:{
+    postLogoutRedirect: process.env.CLIENT_URL,
+    callback: "/callback",
+    logout: "/logout",
+    login: "/login",
+  }
   // Add state parameter to avoid BadRequestError
  
 };
@@ -67,6 +73,20 @@ app.get("/", async (req, res) => {
         return res.redirect(process.env.CLIENT_URL);
     } else {
         return res.send("You are not logged in");
+    }
+});
+
+app.post("/login", async (req, res) => {
+    const { username, password } = req.body;
+    // Perform authentication logic here
+    // For example, check username and password against the database
+    const user = await User.findOne({ username, password });
+    if (user) {
+        // Authentication successful
+        res.status(200).json({ success: true, user });
+    } else {
+        // Authentication failed
+        res.status(401).json({ success: false, message: "Invalid credentials" });
     }
 });
 
