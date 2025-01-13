@@ -53,7 +53,7 @@ function Profile() {
         <DropdownMenuItem
           className="cursor-pointer"
           onClick={() => {
-            router.push("https://localhost:8000/logout");
+            router.push("http://localhost:8000/logout");
           }}
         >
           <LogOut className="mr-2 h-4 w-4" />

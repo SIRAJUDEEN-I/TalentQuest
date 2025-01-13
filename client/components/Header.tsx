@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation";
 import React from "react";
 import Profile from "./profile";
 
-
 function Header() {
   const { isAuthenticated } = useGlobalContext();
   const pathname = usePathname();
@@ -15,7 +14,7 @@ function Header() {
     <header className="px-10 py-6 bg-[#D7DEDC] text-gray-500 flex justify-between items-center">
       <Link href={"/"} className="flex items-center gap-2">
         <Image src="/logo.svg" alt="logo" width={45} height={45} />
-        <h1 className="font-extrabold text-2xl text-[#7263f3]">JobFindr</h1>
+        <h1 className="font-extrabold text-2xl text-[#7263f3]">Talent Quest</h1>
       </Link>
 
       <ul className="flex items-center gap-8">
@@ -48,15 +47,15 @@ function Header() {
                 : ""
             }`}
           >
-            Post  Job
+            Post a Job
           </Link>
         </li>
       </ul>
 
       <div className="flex items-center gap-4">
         {isAuthenticated ? (
-         <Profile/>
-        ):(
+          <Profile />
+        ) : (
           <div className="flex items-center gap-6">
             <Link
               href={"http://localhost:8000/login"}
@@ -65,7 +64,13 @@ function Header() {
               <LogIn className="w-4 h-4" />
               Login
             </Link>
-            
+            <Link
+              href={"http://localhost:8000/login"}
+              className="py-2 px-6 rounded-md border flex items-center gap-4 border-[#7263F3] text-[#7263F3] hover:bg-[#7263F3]/10 trasition-all duration-200 ease-in-out"
+            >
+              <UserPlus className="w-4 h-4" />
+              Register
+            </Link>
           </div>
         )}
       </div>
