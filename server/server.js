@@ -39,85 +39,76 @@ app.use(
     exposedHeaders: ["set-cookie"],
   })
 );
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
 app.use(auth(config));
 
+// function to check if user exists in the db
+const enusureUserInDB = asyncHandler(async (user) => {
+  try {
+    const existingUser = await User.findOne({ auth0Id: user.sub });
 
+    if (!existingUser) {
+      // create a new user document
+      const newUser = new User({
+        auth0Id: user.sub,
+        email: user.email,
+        name: user.name,
+        role: "jobseeker",
+        profilePicture: user.picture,
+      });
 
+      await newUser.save();
 
-
-// Function to check if user exists in db
-const ensureUserInDB = asyncHandler(async (user) => {
-    try {
-        const existingUser = await User.findOne({ auth0Id: user.sub });
-        if (!existingUser) {
-            const newUser = new User({
-                auth0Id: user.sub,
-                name: user.name,
-                email: user.email,
-                
-                role: "jobseeker",
-                profilePicture: user.picture,
-            });
-            await newUser.save();
-            console.log("New user created", user);
-        } else {
-            console.log("User already exists", user);
-        }
-    } catch (error) {
-        console.log("error", error.message);
+      console.log("User added to db", user);
+    } else {
+      console.log("User already exists in db", existingUser);
     }
+  } catch (error) {
+    console.log("Error checking or adding user to db", error.message);
+  }
 });
 
 app.get("/", async (req, res) => {
-    if (req.oidc.isAuthenticated()) {
-        await ensureUserInDB(req.oidc.user);
-        // Redirect to frontend
-        return res.redirect(process.env.CLIENT_URL);
-    } else {
-        return res.send("You are not logged in");
-    }
+  if (req.oidc.isAuthenticated()) {
+    // check if Auth0 user exists in the db
+    await enusureUserInDB(req.oidc.user);
+
+    // redirect to the frontend
+    return res.redirect(process.env.CLIENT_URL);
+  } else {
+    return res.send("Logged out");
+  }
 });
 
-app.post("/login", async (req, res) => {
-    const { username, password } = req.body;
-    // Perform authentication logic here
-    // For example, check username and password against the database
-    const user = await User.findOne({ username, password });
-    if (user) {
-        // Authentication successful
-        res.status(200).json({ success: true, user });
-    } else {
-        // Authentication failed
-        res.status(401).json({ success: false, message: "Invalid credentials" });
-    }
-});
-
-// Routes
-const routeFiles = fs.readdirSync('./routes');
+// routes
+const routeFiles = fs.readdirSync("./routes");
 
 routeFiles.forEach((file) => {
-    // Import dynamic routes
-    import(`./routes/${file}`)
+  // import dynamic routes
+  import(`./routes/${file}`)
     .then((route) => {
-        app.use("/api/v1/", route.default);
-    }).catch((error) => {
-        console.log("error importing route", error);
+      app.use("/api/v1/", route.default);
+    })
+    .catch((error) => {
+      console.log("Error importing route", error);
     });
 });
 
 const server = async () => {
-    try {
-        await connect();
-        app.listen(process.env.PORT, () => {
-            console.log(`Server is running on port ${process.env.PORT}`);
-        });
-    } catch (error) {
-        console.log("err", error.message);
-        process.exit(1);
-    }
-}
+  try {
+    await connect();
+
+    app.listen(process.env.PORT, () => {
+      console.log(`Server is running on port ${process.env.PORT}`);
+    });
+  } catch (error) {
+    console.log("Server error", error.message);
+    process.exit(1);
+  }
+};
 
 server();
