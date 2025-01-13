@@ -24,7 +24,16 @@ const config = {
     callback: "/callback",
     logout: "/logout",
     login: "/login",
-  }
+  },
+   session: {
+    absoluteDuration: 30 * 24 * 60 * 60 * 1000, // 30 days
+    cookie: {
+      domain: "jobfindr-q1cl.onrender.com",
+      secure: true,
+      sameSite: "None",
+    },
+  },
+};
   // Add state parameter to avoid BadRequestError
  
 };
