@@ -78,15 +78,13 @@ export default function Home() {
           <p className="text-xl mb-8">
             Connect with thousands of employers and job seekers on our platform
           </p>
-          <div className="max-w-2xl mx-auto flex gap-4">
-            <Input
-              type="text"
-              placeholder="Job title or keyword"
-              className="flex-grow bg-white text-black"
-            />
-            <Button className="bg-[#7263f3] text-white">
+          <div className="max-w-2xl mx-auto  gap-4">
+            
+            
+          
+            <Button className="  bg-[#7263f3] text-white">
               <SearchIcon className="w-6 h-6" />
-              Search Jobs
+              <a href="/findwork">Search Jobs</a>
             </Button>
           </div>
         </div>

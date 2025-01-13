@@ -8,11 +8,20 @@ import { useJobsContext } from "@/context/jobsContext";
 import { Job } from "@/types/types";
 import { grip, list, table } from "@/utils/Icons";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 
 function page() {
-  const { jobs, filters } = useJobsContext();
+  const { jobs, filters, searchJobs } = useJobsContext();
   const [columns, setColumns] = React.useState(3);
+  const searchParams = useSearchParams();
+  const query = searchParams.get("query");
+
+  useEffect(() => {
+    if (query) {
+      searchJobs(query, "", "");
+    }
+  }, [query]);
 
   // cycle through 1, 2, 3 columns
   const toggleGridColumns = () => {
@@ -25,8 +34,8 @@ function page() {
     return list;
   };
 
-  const filetredJobs =
-    filters.fullTime || filters.partTime || filters.contract || filters.internet
+  const filteredJobs =
+    filters.fullTime || filters.partTime || filters.contract || filters.internship
       ? jobs.filter((job: Job) => {
           if (filters.fullTime && Array.isArray(job.jobType) && job.jobType.includes("Full Time"))
             return true;
@@ -105,7 +114,7 @@ function page() {
             }`}
           >
             {jobs.length > 0 ? (
-              filetredJobs.map((job: Job) => (
+              filteredJobs.map((job: Job) => (
                 <JobCard key={job._id} job={job} />
               ))
             ) : (

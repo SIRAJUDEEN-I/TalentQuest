@@ -86,16 +86,16 @@ function MyJob({ job }: JobProps) {
         <div className="flex justify-between">
           <div>
             <div className="flex flex-wrap gap-2 mb-4">
-              {job.skills.map((skill, index) => (
+              {Array.isArray(job.skills) && job.skills.map((skill, index) => (
                 <Badge key={index} variant="secondary">
                   {skill}
                 </Badge>
               ))}
             </div>
             <div className="flex flex-wrap gap-2 mb-4">
-              {job.tags.map((skill, index) => (
+              {Array.isArray(job.tags) && job.tags.map((tag, index) => (
                 <Badge key={index} variant="outline">
-                  {skill}
+                  {tag}
                 </Badge>
               ))}
             </div>
